@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
+<h1>Instrumentation Results for Standard_QR_Algorithm_mex</h1>
+<h2>Summary</h2>
+<p>To re-create this report:</p>
+<pre>  showInstrumentationResults Standard_QR_Algorithm_mex -proposeFL -defaultDT numerictype(1,16)</pre>
+
+<p>MEX-function name:</p>
+<pre>Standard_QR_Algorithm_mex</pre>
+<p>Timestamp:</p>
+<pre>Tue Jun 27 11:45:12 2023</pre>
+<p>To open this report from the MATLAB command line:</p>
+<pre> web('-browser','C:\Users\user\Documents\110_spring_grad\VLSI DSP 架構-黃穎聰\vlsi_dsp_hw1\instrumentation\Standard_QR_Algorithm_mex\html\printable.html')</pre>
+
+
+<h2>Function Standard_QR_Algorithm </h2>
+
+<pre>
+function [Q,R] = Standard_QR_Algorithm(M_in) %#codegen
+  [m,n] = size(M_in);
+  R = M_in;
+  Q = coder.nullcopy(repmat(M_in(:,1),1,m));    % Declare type and size of Q
+  Q(:) = eye(m);                                % Initialize Q
+  for j=1:n
+    for i=m:-1:(j+1)
+      [R(j,j:end),R(i,j:end),Q(:,j),Q(:,i)] = ...
+          Standard_Givens(R(j,j:end),R(i,j:end),Q(:,j),Q(:,i));
+    end
+  end
+end
+</pre>
+<table style="border-collapse: collapse; border: solid;" border="1">
+<caption><b>Logged Variables for Standard_QR_Algorithm</b></caption>
+<tr><th>Variable</th><th>Type</th><th>Size</th><th>Class</th><th>Complex</th><th>Proposed<br>Signedness</th><th>Proposed<br>WL</th><th>Proposed<br>FL</th><th>Always<br>Whole Number</th><th>SimMin</th><th>SimMax</th></tr>
+<tr><td><code>M_in</code></td><td><code>Input</code></td><td><code>8&nbsp;x&nbsp;4</code></td><td><code>double</code></td><td><code>No</code></td><td><code>Signed</code></td><td><code>16</code></td><td><code>15</code></td><td><code>No</code></td><td><code>-0.9999711862279714</code></td><td><code>0.9999770525697321</code></td></tr>
+<tr><td><code>Q</code></td><td><code>Output</code></td><td><code>8&nbsp;x&nbsp;8</code></td><td><code>double</code></td><td><code>No</code></td><td><code>Signed</code></td><td><code>16</code></td><td><code>14</code></td><td><code>No</code></td><td><code>-0.969301020293777</code></td><td><code>1</code></td></tr>
+<tr><td><code>R</code></td><td><code>Output</code></td><td><code>8&nbsp;x&nbsp;4</code></td><td><code>double</code></td><td><code>No</code></td><td><code>Signed</code></td><td><code>16</code></td><td><code>13</code></td><td><code>No</code></td><td><code>-2.407144853996611</code></td><td><code>2.473133013126888</code></td></tr>
+<tr><td><code>i</code></td><td><code>Local</code></td><td><code>1&nbsp;x&nbsp;1</code></td><td><code>double</code></td><td><code>No</code></td><td><code>Signed</code></td><td><code>16</code></td><td><code>0</code></td><td><code><b>Yes</b></code></td><td><code>2</code></td><td><code>8</code></td></tr>
+<tr><td><code>j</code></td><td><code>Local</code></td><td><code>1&nbsp;x&nbsp;1</code></td><td><code>double</code></td><td><code>No</code></td><td><code>Signed</code></td><td><code>16</code></td><td><code>0</code></td><td><code><b>Yes</b></code></td><td><code>1</code></td><td><code>4</code></td></tr>
+<tr><td><code>m</code></td><td><code>Local</code></td><td><code>1&nbsp;x&nbsp;1</code></td><td><code>double</code></td><td><code>No</code></td><td><code>Signed</code></td><td><code>16</code></td><td><code>0</code></td><td><code><b>Yes</b></code></td><td><code>8</code></td><td><code>8</code></td></tr>
+<tr><td><code>n</code></td><td><code>Local</code></td><td><code>1&nbsp;x&nbsp;1</code></td><td><code>double</code></td><td><code>No</code></td><td><code>Signed</code></td><td><code>16</code></td><td><code>0</code></td><td><code><b>Yes</b></code></td><td><code>4</code></td><td><code>4</code></td></tr>
+</table>
+
+<h2>Function Standard_Givens </h2>
+
+<pre>
+function [x,y,u,v] = Standard_Givens(x,y,u,v) %#codegen
+  a = x(1); b = y(1);
+  if b==0   
+    % No rotation necessary.  c = 1; s = 0;
+    return;
+  else
+%     if abs(b) > abs(a)
+%       t = a/b; s = 1/sqrt(1+t^2); c = s*t;
+%     else
+      t = b/a; c = 1/sqrt(1+t^2); s = c*t;
+%     end
+  end
+  x0 = x;             u0 = u;
+  % x and y form R,   u and v form Q
+  x(:) = c*x0 + s*y;  u(:) = c*u0 + s*v;
+  y(:) = -s*x0 + c*y;  v(:) = -s*u0 + c*v;
+end
+</pre>
+<table style="border-collapse: collapse; border: solid;" border="1">
+<caption><b>Logged Variables for Standard_Givens</b></caption>
+<tr><th>Variable</th><th>Type</th><th>Size</th><th>Class</th><th>Complex</th><th>Proposed<br>Signedness</th><th>Proposed<br>WL</th><th>Proposed<br>FL</th><th>Always<br>Whole Number</th><th>SimMin</th><th>SimMax</th></tr>
+<tr><td><code>a</code></td><td><code>Local</code></td><td><code>1&nbsp;x&nbsp;1</code></td><td><code>double</code></td><td><code>No</code></td><td><code>Signed</code></td><td><code>16</code></td><td><code>13</code></td><td><code>No</code></td><td><code>-2.2833239377365153</code></td><td><code>2.3420959247454327</code></td></tr>
+<tr><td><code>b</code></td><td><code>Local</code></td><td><code>1&nbsp;x&nbsp;1</code></td><td><code>double</code></td><td><code>No</code></td><td><code>Signed</code></td><td><code>16</code></td><td><code>14</code></td><td><code>No</code></td><td><code>-1.5061922769713738</code></td><td><code>1.9034740724746264</code></td></tr>
+<tr><td><code>c</code></td><td><code>Local</code></td><td><code>1&nbsp;x&nbsp;1</code></td><td><code>double</code></td><td><code>No</code></td><td><code>Signed</code></td><td><code>16</code></td><td><code>14</code></td><td><code>No</code></td><td><code>0.001181468356452853</code></td><td><code>0.9999999971631797</code></td></tr>
+<tr><td><code>s</code></td><td><code>Local</code></td><td><code>1&nbsp;x&nbsp;1</code></td><td><code>double</code></td><td><code>No</code></td><td><code>Signed</code></td><td><code>16</code></td><td><code>14</code></td><td><code>No</code></td><td><code>-0.9999888847039088</code></td><td><code>0.999999302066018</code></td></tr>
+<tr><td><code>t</code></td><td><code>Local</code></td><td><code>1&nbsp;x&nbsp;1</code></td><td><code>double</code></td><td><code>No</code></td><td><code>Signed</code></td><td><code>16</code></td><td><code>5</code></td><td><code>No</code></td><td><code>-212.09032795860415</code></td><td><code>846.4037962627594</code></td></tr>
+<tr><td><code>u</code></td><td><code>I/O</code></td><td><code>8&nbsp;x&nbsp;1</code></td><td><code>double</code></td><td><code>No</code></td><td><code>Signed</code></td><td><code>16</code></td><td><code>14</code></td><td><code>No</code></td><td><code>-0.969301020293777</code></td><td><code>1</code></td></tr>
+<tr><td><code>u0</code></td><td><code>Local</code></td><td><code>8&nbsp;x&nbsp;1</code></td><td><code>double</code></td><td><code>No</code></td><td><code>Signed</code></td><td><code>16</code></td><td><code>14</code></td><td><code>No</code></td><td><code>-0.969301020293777</code></td><td><code>1</code></td></tr>
+<tr><td><code>v</code></td><td><code>I/O</code></td><td><code>8&nbsp;x&nbsp;1</code></td><td><code>double</code></td><td><code>No</code></td><td><code>Signed</code></td><td><code>16</code></td><td><code>14</code></td><td><code>No</code></td><td><code>-0.9666523079123969</code></td><td><code>1</code></td></tr>
+<tr><td><code>x</code></td><td><code>I/O</code></td><td><code>1&nbsp;x&nbsp;<b>:</b>4</code></td><td><code>double</code></td><td><code>No</code></td><td><code>Signed</code></td><td><code>16</code></td><td><code>13</code></td><td><code>No</code></td><td><code>-2.407144853996611</code></td><td><code>2.473133013126888</code></td></tr>
+<tr><td><code>x0</code></td><td><code>Local</code></td><td><code>1&nbsp;x&nbsp;<b>:</b>4</code></td><td><code>double</code></td><td><code>No</code></td><td><code>Signed</code></td><td><code>16</code></td><td><code>13</code></td><td><code>No</code></td><td><code>-2.2833239377365153</code></td><td><code>2.3420959247454327</code></td></tr>
+<tr><td><code>y</code></td><td><code>I/O</code></td><td><code>1&nbsp;x&nbsp;<b>:</b>4</code></td><td><code>double</code></td><td><code>No</code></td><td><code>Signed</code></td><td><code>16</code></td><td><code>14</code></td><td><code>No</code></td><td><code>-1.6563273392212703</code></td><td><code>1.938172513001435</code></td></tr>
+</table>
+</html>
